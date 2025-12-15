@@ -1,12 +1,12 @@
 ## Testing Coverage
-- order_io.py --- 55%
-- pricing.py ---- 41%
-- TOTAL --------- 48%
+- order_io.py --- 95%
+- pricing.py ---- 96%
+- TOTAL --------- 96%
 
 ## Missing Lines
-- order_io.py --- 12, 15, 18, 21-26
-- pricing.py --- 7, 13, 19-21, 24-26, 29-33
+- order_io.py --- 14
+- pricing.py --- 22
 
 ## Uncovered Parts:
-- Important line to address on order_io.py is line 18, when a line is not formated correctly in the csv
-- Important lines to address on pricing.py are 7 addition of "$", and 24 - 26 when the discount rate is negative. 
+- Important line to address on pricing.py, line 22 that is for Raising Error when a negative percent is provided.
+- Line 14 on order_io.py is used when the csv format is messed up.

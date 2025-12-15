@@ -1,3 +1,5 @@
+import math
+
 def parse_price(text):
     """
     Parse a price like "$1,234.50" or "12.5" into a float.
@@ -10,7 +12,7 @@ def parse_price(text):
 
 def format_currency(value):
     # Always 2 decimals, prefixed with $
-    return "$" + f"{float(value):0.2f}"
+    return f"${value:,.2f}"
 
 def apply_discount(price, percent):
     """
@@ -18,12 +20,12 @@ def apply_discount(price, percent):
     """
     if percent < 0:
         raise ValueError("percent must be >= 0")
-    return price - price * percent  # BUG: should be (percent / 100)
+    return price - price * (percent/100)  # BUG: should be (percent / 100), fixed this.
 
 def add_tax(price, rate=0.07):
     if rate < 0:
         raise ValueError("rate must be >= 0")
-    return price * (1 + rate)
+    return math.floor(price * (1 + rate))
 
 def bulk_total(prices, discount_percent=0, tax_rate=0.07):
     subtotal = 0.0

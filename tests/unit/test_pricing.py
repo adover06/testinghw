@@ -1,9 +1,8 @@
 import pytest
 from src.pricing import parse_price, format_currency, bulk_total, add_tax, apply_discount
+from src.order_io import load_order, write_receipt
 
-
-#Note: - Review the pytest documentation - You need to use one or more pytest features (e.g.,
-#@pytest.mark.parametrize, fixtures). Document in README what pytest features you used
+#Pricing tests
 
 @pytest.mark.parametrize("input_str,expected", [
     ("$1,234.50", 1234.50),
@@ -55,3 +54,26 @@ def test_add_tax(input_value, input_tax_rate, expected):
 def test_bulk_total(prices, discount_percent, tax_rate, expected_total):
     assert bulk_total(prices, discount_percent=discount_percent, tax_rate=tax_rate) == expected_total
     
+#Order IO tests
+
+def test_load_order_simple(tmp_path):
+    csv_path = tmp_path / "order.csv"
+    csv_path.write_text("item,price\nitem,$10.00\nitem,$5.50\n", encoding="utf-8")
+
+    items = load_order(csv_path)
+
+    assert items == [
+        ("item", parse_price("$10.00")),
+        ("item", parse_price("$5.50")),
+    ]
+
+def test_write_receipt_creates_file(tmp_path):
+    receipt_path = tmp_path / "receipt.txt"
+    items = [("item", 10.0), ("item", 5.5)]
+
+    write_receipt(receipt_path, items, discount_percent=10, tax_rate=0.1)
+
+    text = receipt_path.read_text(encoding="utf-8")
+    assert "item" in text
+    assert "item" in text
+    assert "TOTAL" in text
